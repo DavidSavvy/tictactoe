@@ -106,7 +106,8 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    
+    if terminal(board):
+        return None
     
     def min_function(board):
         current_min = 1
@@ -124,8 +125,9 @@ def minimax(board):
         if terminal(board):
             return utility(board)
 
-    if terminal(board):
-        return None
+    """
+    Nonetype error on max/min functions, maybe check math import? Doesn't import math.min/math.max
+    """
     
     if player(board) == X:
         max_function(board)
