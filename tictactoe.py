@@ -111,18 +111,26 @@ def minimax(board):
     
     def min_function(board):
         current_min = 1
+        current_action = None
         for action in actions(board):
+            current_action = action
             current_min = min(current_min, max_function(result(board, action)))
+            return current_min
         
         if terminal(board):
+            #print("min_function done")
             return utility(board)
+        
+
 
     def max_function(board):
         current_max = -1
         for action in actions(board):
             current_max = max(current_max, min_function(result(board, action)))
+            return current_max
         
         if terminal(board):
+            #print("max_function done")
             return utility(board)
 
     """
