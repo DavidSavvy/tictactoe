@@ -106,38 +106,63 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
+    """
+    find a way for min/max functions to return the right move after they're done. currently they just keep returning the current_min/max
+    """
     if terminal(board):
         return None
     
     def min_function(board):
         current_min = 1
-        current_action = None
-        for action in actions(board):
-            current_action = action
-            current_min = min(current_min, max_function(result(board, action)))
-            return current_min
         
         if terminal(board):
             #print("min_function done")
             return utility(board)
-        
-
-
+        else:
+            for action in actions(board):
+                current_min = min(current_min, max_function(result(board, action)))
+                return current_min
+            
     def max_function(board):
         current_max = -1
-        for action in actions(board):
-            current_max = max(current_max, min_function(result(board, action)))
-            return current_max
         
         if terminal(board):
             #print("max_function done")
             return utility(board)
+        else:
+            for action in actions(board):
+                current_max = max(current_max, min_function(result(board, action)))
+                return current_max
+
+    final_action = None
+    if player(board) == X:
+        final_max = -1  
+        for action in actions(board):
+            new_board = result(board, action)
+            predicted_max = max_function(new_board)
+            if predicted_max > final_max:
+                final_action = action
+    else:
+        final_min = 1   
+        for action in actions(board):
+            new_board = result(board, action)
+            predicted_min = min_function(new_board)
+            if predicted_min < final_min:
+                final_action = action
+    
+    return final_action
+
 
     """
-    Nonetype error on max/min functions, maybe check math import? Doesn't import math.min/math.max
+    Traceback (most recent call last):
+        File "T:\tictactoe\runner.py", line 116, in <module>
+            board = ttt.result(board, move)
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+        File "T:\tictactoe\tictactoe.py", line 54, in result
+            if board_copy[action[0]][action[1]] == EMPTY:
+                        ~~~~~~^^^
+    TypeError: 'NoneType' object is not subscriptable
+
+    minimax() function seems to not return a real final_action in very specfic moves
+    might have to do with winner function? seems to have to do with the center square
     """
-    
-    if player(board) == X:
-        max_function(board)
-    else:
-        min_function(board)
