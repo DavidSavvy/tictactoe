@@ -112,44 +112,45 @@ def minimax(board):
     if terminal(board):
         return None
     
-    def min_function(board):
+    def min_function(working_board):
         current_min = 1
         
-        if terminal(board):
+        if terminal(working_board):
             #print("min_function done")
-            return utility(board)
+            return utility(working_board)
         else:
-            for action in actions(board):
-                current_min = min(current_min, max_function(result(board, action)))
+            for action in actions(working_board):
+                current_min = min(current_min, max_function(result(working_board, action)))
                 return current_min
             
-    def max_function(board):
+    def max_function(working_board):
         current_max = -1
         
-        if terminal(board):
+        if terminal(working_board):
             #print("max_function done")
-            return utility(board)
+            return utility(working_board)
         else:
-            for action in actions(board):
-                current_max = max(current_max, min_function(result(board, action)))
+            for action in actions(working_board):
+                current_max = max(current_max, min_function(result(working_board, action)))
                 return current_max
 
     final_action = None
     if player(board) == X:
-        final_max = -1  
+        final_max = -1 
         for action in actions(board):
             new_board = result(board, action)
-            predicted_max = max_function(new_board)
-            if predicted_max > final_max:
+            predicted_max = min_function(new_board)
+            if predicted_max >= final_max:
                 final_action = action
     else:
-        final_min = 1   
+        final_min = 1
         for action in actions(board):
             new_board = result(board, action)
-            predicted_min = min_function(new_board)
-            if predicted_min < final_min:
+            predicted_min = max_function(new_board)
+            if predicted_min <= final_min:
                 final_action = action
     
+    print(final_action)
     return final_action
 
 
