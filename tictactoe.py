@@ -4,6 +4,8 @@ Tic Tac Toe Player
 
 import math
 from copy import deepcopy
+from pickle import NONE
+import random
 
 X = "X"
 O = "O"
@@ -107,8 +109,9 @@ def minimax(board):
     Returns the optimal action for the current player on the board.
     """
     """
-    find a way for min/max functions to return the right move after they're done. currently they just keep returning the current_min/max
+    if statements already picking a point so the respective player can't properly minimize or maximize. try to rewire the method for minimax
     """
+    #print(actions(board))
     if terminal(board):
         return None
     
@@ -116,42 +119,62 @@ def minimax(board):
         current_min = 1
         
         if terminal(working_board):
-            #print("min_function done")
+            print("min done")
+            print(utility(working_board))
             return utility(working_board)
         else:
             for action in actions(working_board):
                 current_min = min(current_min, max_function(result(working_board, action)))
-                return current_min
+                return (current_min, action)
             
     def max_function(working_board):
         current_max = -1
         
         if terminal(working_board):
-            #print("max_function done")
+            print("max done")
+            print(utility(working_board))
             return utility(working_board)
         else:
             for action in actions(working_board):
                 current_max = max(current_max, min_function(result(working_board, action)))
-                return current_max
+                return (current_max, action)
 
     final_action = None
     if player(board) == X:
-        final_max = -1 
+        #final_max = -1 
+        final_action = max_function(board)[1]
+        
+
+        """
         for action in actions(board):
             new_board = result(board, action)
             predicted_max = min_function(new_board)
-            if predicted_max >= final_max:
+            if predicted_max > final_max:
                 final_action = action
+            print(action)
+        #print(final_action)
+        if final_action == None:
+            #print(random.choice(list(actions(board))))
+            final_action = random.choice(list(actions(board)))
+        """
     else:
-        final_min = 1
+        #final_min = 1
+        final_action = min_function(board)[1]
+        """
         for action in actions(board):
             new_board = result(board, action)
             predicted_min = max_function(new_board)
-            if predicted_min <= final_min:
+            if predicted_min < final_min:
                 final_action = action
-    
+            print(action)
+        #print(final_action)
+        if final_action == None:
+            final_action = random.choice(list(actions(board)))
+            #print(random.choice(list(actions(board))))
+        """
     print(final_action)
     return final_action
+    
 
 
     """
