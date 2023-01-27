@@ -114,34 +114,48 @@ def minimax(board):
     #print(actions(board))
     if terminal(board):
         return None
-    
+    #global current_min
+    #current_min = 1
     def min_function(working_board):
-        current_min = 1
         
+        #global current_min
         if terminal(working_board):
             print("min done")
             print(utility(working_board))
-            return utility(working_board)
+            print(working_board)
+            return (utility(working_board), None)
         else:
             for action in actions(working_board):
-                current_min = min(current_min, max_function(result(working_board, action)))
+                print(actions(working_board))
+                current_min = 1
+                print("min run")
+                current_min = min(current_min, max_function(result(working_board, action))[0])
+                print(current_min)
                 return (current_min, action)
-            
+    #global current_max
+    #current_max = -1        
     def max_function(working_board):
-        current_max = -1
         
+        #global current_max
         if terminal(working_board):
             print("max done")
             print(utility(working_board))
-            return utility(working_board)
+            return (utility(working_board), None)
         else:
             for action in actions(working_board):
-                current_max = max(current_max, min_function(result(working_board, action)))
+                
+                print(actions(working_board))
+                current_max = -1
+                print("max run")
+                current_max = max(current_max, min_function(result(working_board, action))[0])
+                print(current_max)
                 return (current_max, action)
 
     final_action = None
     if player(board) == X:
         #final_max = -1 
+        
+
         final_action = max_function(board)[1]
         
 
@@ -159,6 +173,7 @@ def minimax(board):
         """
     else:
         #final_min = 1
+        
         final_action = min_function(board)[1]
         """
         for action in actions(board):
