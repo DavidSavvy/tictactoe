@@ -109,7 +109,7 @@ def minimax(board):
     Returns the optimal action for the current player on the board.
     """
     """
-    if statements already picking a point so the respective player can't properly minimize or maximize. try to rewire the method for minimax
+    works a little better, not always the best move 
     """
     #print(actions(board))
     if terminal(board):
@@ -120,43 +120,55 @@ def minimax(board):
         
         #global current_min
         if terminal(working_board):
-            print("min done")
-            print(utility(working_board))
-            print(working_board)
+            #print("min done")
+            #print(utility(working_board))
+            #print(working_board)
             return (utility(working_board), None)
         else:
+            final_action = None
+            current_min = 1
             for action in actions(working_board):
-                print(actions(working_board))
+                #print('minstart',working_board)
+                #print(actions(working_board))
                 current_min = 1
-                print("min run")
-                current_min = min(current_min, max_function(result(working_board, action))[0])
-                print(current_min)
-                return (current_min, action)
+                #print("min run")
+                function_value = max_function(result(working_board, action))[0]
+                if function_value < current_min and working_board == board:
+                    current_min = function_value
+                    final_action = action
+                #print('minend',working_board)
+                #print(current_min)
+            return (current_min, final_action)
     #global current_max
     #current_max = -1        
     def max_function(working_board):
-        
+        #print(working_board)
         #global current_max
         if terminal(working_board):
-            print("max done")
-            print(utility(working_board))
+            #print("max done")
+            #print(utility(working_board))
             return (utility(working_board), None)
         else:
+            final_action = None
+            current_max = -1
             for action in actions(working_board):
-                
-                print(actions(working_board))
-                current_max = -1
-                print("max run")
-                current_max = max(current_max, min_function(result(working_board, action))[0])
-                print(current_max)
-                return (current_max, action)
+                #print('maxstart',working_board)
+                #print(actions(working_board))
+                #print("max run")
+                function_value = min_function(result(working_board, action))[0]
+                if function_value > current_max and working_board == board:
+                    current_max = function_value
+                    final_action = action
+                #print('maxend',working_board)
+                #print(current_max)
+            return (current_max, final_action)
 
-    final_action = None
+    outer_final_action = None
     if player(board) == X:
         #final_max = -1 
         
 
-        final_action = max_function(board)[1]
+        outer_final_action = max_function(board)[1]
         
 
         """
@@ -174,7 +186,7 @@ def minimax(board):
     else:
         #final_min = 1
         
-        final_action = min_function(board)[1]
+        outer_final_action = min_function(board)[1]
         """
         for action in actions(board):
             new_board = result(board, action)
@@ -187,8 +199,10 @@ def minimax(board):
             final_action = random.choice(list(actions(board)))
             #print(random.choice(list(actions(board))))
         """
-    print(final_action)
-    return final_action
+    if outer_final_action == None:
+        outer_final_action = random.choice(list(actions(board)))
+    print(outer_final_action)
+    return outer_final_action
     
 
 
