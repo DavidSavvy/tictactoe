@@ -117,25 +117,37 @@ def minimax(board):
     #global current_min
     #current_min = 1
     def min_function(working_board):
-        
+        final_action = None
+        current_min = 1
+        is_finished = False
         #global current_min
         if terminal(working_board):
             #print("min done")
             #print(utility(working_board))
             #print(working_board)
+            is_finished = True
             return (utility(working_board), None)
         else:
-            final_action = None
-            current_min = 1
+            
             for action in actions(working_board):
                 #print('minstart',working_board)
                 #print(actions(working_board))
-                current_min = 1
-                #print("min run")
+                print("min run")
                 function_value = max_function(result(working_board, action))[0]
+                """
+                if working_board is not board:
+                    return (function_value, None)
+                elif working_board is board:
+                    if function_value < current_min:
+                        current_min = function_value
+                        final_action = action
+                    print("done")
+                """
+                
                 if function_value < current_min and working_board == board:
                     current_min = function_value
                     final_action = action
+                
                 #print('minend',working_board)
                 #print(current_min)
             return (current_min, final_action)
@@ -144,19 +156,33 @@ def minimax(board):
     def max_function(working_board):
         #print(working_board)
         #global current_max
+        
+        is_finished = False
         if terminal(working_board):
             #print("max done")
             #print(utility(working_board))
+            is_finished = True
             return (utility(working_board), None)
         else:
-            final_action = None
-            current_max = -1
+            
             for action in actions(working_board):
                 #print('maxstart',working_board)
                 #print(actions(working_board))
-                #print("max run")
+                final_action = None
+                current_max = -1
+                print("max run")
                 function_value = min_function(result(working_board, action))[0]
-                if function_value > current_max and working_board == board:
+                
+                """
+                if working_board is not board and is_finished:
+                    return (function_value, None)
+                elif working_board is board:
+                    if function_value > current_max:
+                        current_max = function_value
+                        final_action = action
+                    print("done")
+                """
+                if function_value > current_max:
                     current_max = function_value
                     final_action = action
                 #print('maxend',working_board)
